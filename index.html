@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kursy Walut</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        select, button {
+            margin-top: 10px;
+        }
+        #rate {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Kursy Walut</h1>
+    <label for="currency">Wybierz walutę:</label>
+    <select id="currency" onchange="fetchExchangeRate()">
+        <option value="EUR">Euro</option>
+        <option value="USD">Dolar Amerykański</option>
+        <option value="GBP">Funt Brytyjski</option>
+        <option value="CHF">Frank Szwajcarski</option>
+        <option value="JPY">Jen Japoński</option>
+        <option value="CZK">Korona Czeska</option>
+    </select>
+
+    <button onclick="fetchExchangeRate()">Sprawdź kurs</button>
+    
+    <div id="rate"></div>
+
+    <script>
+        async function fetchExchangeRate() {
+            const currency = document.getElementById('currency').value;
+            const response = await fetch(`http://api.nbp.pl/api/exchangerates/rates/A/${currency}/?format=json`);
+            const data = await response.json();
+            const rate = data.rates[0].mid;
+            document.getElementById('rate').innerText = `Kurs ${currency}: ${rate} PLN`;
+        }
+    </script>
+</body>
+</html>
